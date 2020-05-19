@@ -7,9 +7,10 @@ import { listProducts } from '../fake_data/products'
 
 const ProductScreen = props => {
 
-    const [list, addList] = useState([]);
-    const [quantity, addQuantity] = useState(0)
+    const [list, addList] = useState([])
     const [title, setTitle] = useState('CART')
+    const [quantity, addQuantity] = useState(0)
+    const [disabledButton, setDisabledButton] = useState(true)
 
     const addProduct = id => {
         if(list.length) {
@@ -25,6 +26,7 @@ const ProductScreen = props => {
         
         addQuantity(quantity + 1)
         setTitle('CART(' + (quantity+1).toString() + ')')
+        setDisabledButton(false)
     }
 
     const updateProducts = lista => {
@@ -33,10 +35,14 @@ const ProductScreen = props => {
         for(var i = 0; i < lista.length; i++) 
             total += lista[i].quantity        
         addQuantity(total)
-        if(total > 0)
+        if(total > 0) {
             setTitle('CART(' + total.toString() + ')')
-        else 
+            setDisabledButton(false)
+        }
+        else {
             setTitle('CART')
+            setDisabledButton(true)
+        }
     }
 
     const renderGridItem = (itemData) => {
@@ -88,12 +94,14 @@ const ProductScreen = props => {
                 </View>
 
                 <View style={styles.textButtonContainer}>
-                    <TouchableOpacity activeOpacity={0.4} onPress={() => {
-                            console.log(list)
+                    <TouchableOpacity 
+                    disabled={disabledButton}
+                    activeOpacity={0.4} 
+                    onPress={() => {
                             props.navigation.push('PurchaseScreen', {products: list, update: updateProducts});
                         }}>
                         <View  >
-                            <Text style={styles.textButton}>FINISH</Text>
+                            <Text style={disabledButton ? styles.disabledTextButton : styles.textButton}>FINISH</Text>
                     </View>
                     </TouchableOpacity>
                 </View>
@@ -141,6 +149,18 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center'
         
     },
+    disabledTextButton: {
+        color: 'white',
+        backgroundColor: "#002c4f",
+        borderWidth: 1,
+        borderRadius: 6,
+        borderColor: "#002c4f",
+        minHeight: '50%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        opacity: 0.8
+        
+    }
 });
 
 export default ProductScreen

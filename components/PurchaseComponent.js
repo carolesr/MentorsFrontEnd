@@ -3,27 +3,6 @@ import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-n
 
 const PurchaseComponent = props => {
 
-    // const [content, setContent] = useState(<View><Text>aa</Text></View>)
-    // // var content;
-    // useEffect(() => {
-    //     console.log(props.flag)
-    //     if(props.flag) {
-    //         var aux = <View style={styles.textButtonContainer}>
-    //                     <TouchableOpacity activeOpacity={0.4} onPress={() => {
-    //                         props.removeProduct( {product: props.product, quantity: props.quantity} )
-    //                         }}>
-    //                         <View  >
-    //                     <Text style={styles.textButton}>{props.flag.toString()}</Text>
-    //                         </View>
-    //                         </TouchableOpacity>
-    //                     </View>
-    //         setContent(aux)
-            
-    //         console.log('aaaaaa')
-    //     }
-    // })
-
-
     return (
         <View style={styles.container}>
             <View style={styles.productContainer}>                
@@ -42,8 +21,6 @@ const PurchaseComponent = props => {
                     <Text style={styles.textContainer}>{props.product.price}</Text>
                 </View>
 
-                {/* {content} */}
-
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity activeOpacity={0.4} onPress={() => {
                         props.removeProduct( {product: props.product, quantity: props.quantity} )
@@ -54,12 +31,6 @@ const PurchaseComponent = props => {
                     </TouchableOpacity>
                 </View>
                 
-
-                {/* <View style={styles.button}>
-                    <Button title='  x  '  color="#002c4f" onPress={() => {
-                        props.removeProduct( {product: props.product, quantity: props.quantity} )
-                    }}/>
-                </View> */}
             </View>
 
         </View>

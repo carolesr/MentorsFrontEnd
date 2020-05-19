@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 
 import PurchaseComponent from '../components/PurchaseComponent';
@@ -8,6 +8,19 @@ const PurchaseScreen = props => {
 
     const [products, updateProducts] = useState( props.navigation.getParam('products') )
     const update = props.navigation.getParam('update')
+    
+    const [quantity, addQuantity] = useState(0)
+    const [disabledButton, setDisabledButton] = useState(true)
+
+    useEffect(() => {
+        var q = 0
+        for(var i = 0; i < products.length; i++)
+            q += products[i].quantity
+        addQuantity(q)
+
+        if (quantity > 0) setDisabledButton(false)
+        else setDisabledButton(true)
+    })
 
     const removeProduct = item => {
         var index = products.map(x => { return x.product }).indexOf(item.product)        
@@ -62,12 +75,15 @@ const PurchaseScreen = props => {
                 </View>
 
                 <View style={styles.textButtonContainer}>
-                    <TouchableOpacity activeOpacity={0.4} onPress={() => {
+                    <TouchableOpacity 
+                    disabled={disabledButton}
+                    activeOpacity={0.4} 
+                    onPress={() => {
                             update(products)
                             props.navigation.goBack();
                         }}>
                         <View  >
-                            <Text style={styles.textButton}>PAY</Text>
+                            <Text style={disabledButton ? styles.disabledTextButton : styles.textButton}>PAY</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -121,6 +137,18 @@ const styles = StyleSheet.create({
         minHeight: '70%',
         textAlign: 'center',
         textAlignVertical: 'center'        
+    },
+    disabledTextButton: {
+        color: 'white',
+        backgroundColor: "#002c4f",
+        borderWidth: 1,
+        borderRadius: 6,
+        borderColor: "#002c4f",
+        minHeight: '70%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        opacity: 0.8
+        
     }
 });
 
