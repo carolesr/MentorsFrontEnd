@@ -7,7 +7,7 @@ const StartScreen = props => {
             <View style={styles.imageContainer}>
                 <Image
                     style={styles.image}
-                    source={require('../assets/logo.png')}
+                    source={require('../assets/logo2.png')}
                 />
             </View>
                 <TouchableOpacity activeOpacity={0.4} onPress={() => {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginTop: 150,
+        marginTop: 100,
         marginBottom: 150
     },
     // button: {
@@ -35,10 +35,14 @@ const styles = StyleSheet.create({
     // },
     image: {
         width: '100%',
-        height: 130,
+        height: '65%'
     },
     imageContainer: {
-        width: '100%'
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'center',
+        width: '80%',
+        height: '80%'
     },
     textButtonContainer: {
         // flex: 1,
