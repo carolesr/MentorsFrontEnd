@@ -12,7 +12,10 @@ const CashScreen = props => {
                 <Text style={styles.textPrice}>R${total.toFixed(2)}</Text>
             </View>
             <Text style={styles.text}>Put your cash in the box and take change if needed</Text>
-            <Text style={styles.text}>Thank you!</Text>
+            <View style={styles.priceContainer}>                
+                <Text style={styles.text}>Thank you!</Text>
+                <Text style={styles.text}>Enjoy your break!</Text>
+            </View>
 
             <View style={styles.bottomButtons}>                
                 <View style={styles.textButtonContainer}>
