@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const PaymentScreen = props => {
     
@@ -17,7 +17,7 @@ const PaymentScreen = props => {
                     <TouchableOpacity
                         activeOpacity={0.4} 
                         onPress={() => {
-                            // props.navigation.push("PaymentScreen", { total: total});
+                            props.navigation.push("CashScreen", { total: total});
                         }}>
                         <View  >
                             <Text style={styles.textButton}>CASH</Text>
