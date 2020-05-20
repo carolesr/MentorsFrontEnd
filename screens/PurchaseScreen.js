@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import PurchaseComponent from '../components/PurchaseComponent';
 import TotalComponent from '../components/TotalComponent';
@@ -11,6 +11,7 @@ const PurchaseScreen = props => {
 
     const [quantity, addQuantity] = useState(0);
     const [disabledButton, setDisabledButton] = useState(true);
+    const [total, setTotal] = useState(0)
 
     useEffect(() => {
         var quant = 0;
@@ -22,6 +23,10 @@ const PurchaseScreen = props => {
         else setDisabledButton(true)
         
     })
+
+    const updateTotal = valor => {
+        setTotal(valor)
+    }
 
     const removeProduct = item => {
         var index = products.map(x => { return x.product }).indexOf(item.product)        
@@ -59,7 +64,11 @@ const PurchaseScreen = props => {
             </View>
 
             <View style={styles.totalContainer}>
-                <TotalComponent products={products}/>
+                <TotalComponent 
+                    products={products}
+                    updateTotal={updateTotal}
+                    isPurchase={true}
+                />
             </View>
             
             <View style={styles.bottomButtons}>
@@ -81,7 +90,7 @@ const PurchaseScreen = props => {
                     activeOpacity={0.4} 
                     onPress={() => {
                             update(products)
-                            props.navigation.goBack();
+                            props.navigation.push("PaymentScreen", { total: total});
                         }}>
                         <View  >
                             <Text style={disabledButton ? styles.disabledTextButton : styles.textButton}>PAY</Text>

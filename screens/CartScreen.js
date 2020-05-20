@@ -49,7 +49,10 @@ const CartScreen = props => {
             </View>
 
             <View style={styles.totalContainer}>
-                <TotalComponent products={products}/>
+                <TotalComponent 
+                    products={products}
+                    isPurchase={false}
+                />
             </View>
             
             <View style={styles.bottomButtons}>
