@@ -9,7 +9,8 @@ const PurchaseComponent = props => {
                 <View style={styles.imageContainer}>
                     <Image
                     style={styles.image}
-                    source={props.product.image}
+                    // source={props.product.image}
+                    source={{uri: props.product.image}}
                     />
                 </View>
                 <View>
@@ -18,7 +19,7 @@ const PurchaseComponent = props => {
             </View>
             <View style={styles.priceContainer}>
                 <View>
-                    <Text style={styles.textContainer}>{props.product.price}</Text>
+                    <Text style={styles.textContainer}>R${props.product.price.toFixed(2)}</Text>
                 </View>
 
                 <View style={styles.textButtonContainer}>

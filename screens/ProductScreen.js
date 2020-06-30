@@ -15,8 +15,7 @@ const ProductScreen = props => {
     const [listProducts, addListProducts] = useState([])
 
     useEffect(() => {
-        console.log('fetch')
-        let url = 'https://192.168.0.22:5001/api/Product/GetAll'
+        let url = 'https://cinqbreak.herokuapp.com/api/Product/GetAll'
         let headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -25,7 +24,6 @@ const ProductScreen = props => {
         fetch(url, {headers: headers})
         .then(response => response.json())
         .then(responseJson => {
-            console.log(responseJson)
             addListProducts(responseJson)
         })
         .catch(e => {
@@ -33,33 +31,20 @@ const ProductScreen = props => {
         })
     },[])
 
-    useEffect(() => {
-        console.log('list update: ')
-        console.log(list)
-    }, [list])
-
     const addProduct = id => {
-        console.log(listProducts)
-        console.log(list)
-        console.log(list.length)
         if(list.length) {
             if (list.filter(x => x.product.idProduct == id).length) { //se já tem um item desse produto na lista, aumenta a quantidade
-                console.log('if')
                 list.find(x => x.product.idProduct == id).quantity += 1
                 addList([...list])
             } else {
-                console.log('else')
-                addList(current => [...current, { product: listProducts.filter(x => x.idProduct == id), quantity: 1 } ])
+                addList(current => [...current, { product: listProducts.filter(x => x.idProduct == id)[0], quantity: 1 } ])
             }
         } else {
-            console.log('else 2')
             let obj = { product: listProducts.filter(x => x.idProduct == id)[0], quantity: 1 }
             let newState = [...list, obj]
-            console.log(newState)
             addList(newState)
         }
         
-        console.log(quantity)
         addQuantity(quantity + 1)
         setTitle('CART(' + (quantity+1).toString() + ')')
         setDisabledButton(false)
@@ -122,7 +107,6 @@ const ProductScreen = props => {
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity activeOpacity={0.4} onPress={() => {
                             props.navigation.push('CartScreen', {products: list, update: updateProducts});
-                            console.log(list)
                         }}>
                         <View  >
                             <Text style={styles.textButton}>{title}</Text>

@@ -57,7 +57,7 @@ const PurchaseScreen = props => {
 
             <View style={styles.flatListContainer}>
                 <FlatList
-                    keyExtractor={(item, index) => (item.product.id).toString()} 
+                    keyExtractor={(item, index) => (item.product.idProduct).toString()} 
                     data={products} 
                     renderItem={renderGridItem}
                 />
