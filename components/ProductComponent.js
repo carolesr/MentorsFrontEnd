@@ -13,10 +13,11 @@ const ProductComponent = props => {
             </View>
             <View style={styles.descriptionContainer}>
                 <View style={styles.textContainer}>
-                    <Text>{props.price}</Text>
+                    <Text>R${props.price.toFixed(2)}</Text>
                 </View> 
                 <View style={styles.textButtonContainer}>                 
                 <TouchableOpacity activeOpacity={0.4} onPress={() => {
+                    console.log(props.id)
                     props.addProduct(props.id)
                     }}>
                     <View  >

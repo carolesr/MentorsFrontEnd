@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 
 import ProductComponent from '../components/ProductComponent'
-import { listProducts } from '../fake_data/products'
+// import { listProducts } from '../fake_data/products'
 
 
 const ProductScreen = props => {
@@ -12,18 +12,54 @@ const ProductScreen = props => {
     const [title, setTitle] = useState('CART');
     const [disabledButton, setDisabledButton] = useState(true);
 
+    const [listProducts, addListProducts] = useState([])
+
+    useEffect(() => {
+        console.log('fetch')
+        let url = 'https://192.168.0.22:5001/api/Product/GetAll'
+        let headers = { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+
+        fetch(url, {headers: headers})
+        .then(response => response.json())
+        .then(responseJson => {
+            console.log(responseJson)
+            addListProducts(responseJson)
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    },[])
+
+    useEffect(() => {
+        console.log('list update: ')
+        console.log(list)
+    }, [list])
+
     const addProduct = id => {
+        console.log(listProducts)
+        console.log(list)
+        console.log(list.length)
         if(list.length) {
-            if (list.filter(x => x.product.id == id).length) { //se já tem um item desse produto na lista, aumenta a quantidade
-                list.find(x => x.product.id == id).quantity += 1
+            if (list.filter(x => x.product.idProduct == id).length) { //se já tem um item desse produto na lista, aumenta a quantidade
+                console.log('if')
+                list.find(x => x.product.idProduct == id).quantity += 1
                 addList([...list])
             } else {
-                addList(current => [...current, { product: listProducts[id-1], quantity: 1 } ])
+                console.log('else')
+                addList(current => [...current, { product: listProducts.filter(x => x.idProduct == id), quantity: 1 } ])
             }
         } else {
-            addList(current => [...current, { product: listProducts[id-1], quantity: 1 } ])
+            console.log('else 2')
+            let obj = { product: listProducts.filter(x => x.idProduct == id)[0], quantity: 1 }
+            let newState = [...list, obj]
+            console.log(newState)
+            addList(newState)
         }
         
+        console.log(quantity)
         addQuantity(quantity + 1)
         setTitle('CART(' + (quantity+1).toString() + ')')
         setDisabledButton(false)
@@ -49,7 +85,7 @@ const ProductScreen = props => {
         return(
                 <View>
                     <ProductComponent 
-                    id={itemData.item.id}
+                    id={itemData.item.idProduct}
                     title={itemData.item.name}
                     price={itemData.item.price}
                     image={itemData.item.image}
@@ -64,7 +100,7 @@ const ProductScreen = props => {
 
             <View style={styles.flatListContainer}>
                 <FlatList
-                    keyExtractor={(item, index) => item.id} 
+                    keyExtractor={(item, index) => item.idProduct} 
                     data={listProducts} 
                     renderItem={renderGridItem} 
                     numColumns={2}
@@ -86,6 +122,7 @@ const ProductScreen = props => {
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity activeOpacity={0.4} onPress={() => {
                             props.navigation.push('CartScreen', {products: list, update: updateProducts});
+                            console.log(list)
                         }}>
                         <View  >
                             <Text style={styles.textButton}>{title}</Text>
