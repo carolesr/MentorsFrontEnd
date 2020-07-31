@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const PaymentScreen = props => {
     
     const total = props.navigation.getParam('total');
+    const products = props.navigation.getParam('products');
+
+    const [purchase, setPurchase] = useState("")
+
+    useEffect(() => {
+        var data = new Date();
+        var date = data.getFullYear() + "-" + ("0" + (data.getMonth() + 1)).substr(-2) + "-" + ("0" + data.getDate()).substr(-2)
+        var total = 0
+        var cart = []
+        products.forEach((item, index) => {
+            var idProduct = item.product.idProduct;
+            var quantity = item.quantity;
+            total += item.product.price
+            cart.push({"idProduct": idProduct, "quantity": quantity})
+        })
+
+        var purchase = {
+            "idUser": "",
+            "date": date,
+            "total": total,
+            "method": "",
+            "cart": cart
+        }
+        setPurchase(purchase)
+
+    }, [])
 
     return (
         <View style={styles.screen}>
@@ -17,7 +43,7 @@ const PaymentScreen = props => {
                     <TouchableOpacity
                         activeOpacity={0.4} 
                         onPress={() => {
-                            props.navigation.push("CashScreen", { total: total});
+                            props.navigation.push("CashScreen", { purchase: purchase});
                         }}>
                         <View  >
                             <Text style={styles.textButton}>CASH</Text>

@@ -90,7 +90,7 @@ const PurchaseScreen = props => {
                     activeOpacity={0.4} 
                     onPress={() => {
                             update(products)
-                            props.navigation.push("PaymentScreen", { total: total});
+                            props.navigation.push("PaymentScreen", { total: total, products: products});
                         }}>
                         <View  >
                             <Text style={disabledButton ? styles.disabledTextButton : styles.textButton}>PAY</Text>

@@ -1,15 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const CashScreen = props => {
     
-    const total = props.navigation.getParam('total');
+    const purchase = props.navigation.getParam('purchase');
+
+    useEffect(() => {
+
+        purchase.method = "cash"
+        console.log('post:')
+        console.log(purchase)
+        var json = JSON.stringify(purchase)
+        console.log(json)
+
+        let url = 'https://cinqbreak.herokuapp.com/api/Purchase/Create'
+        let headers = { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        fetch(url, 
+            {headers: headers, method: 'POST', body: json})
+        .then(response => response.json())
+        .then(responseJson => {
+            console.log('SUCCESS')
+            console.log(responseJson)
+        })
+        .catch(e => {
+            console.log('FAILURE')
+            console.log(e)
+        })
+
+    },[])
 
     return (
         <View style={styles.screen}>
             <View style={styles.priceContainer}>                
                 <Text style={styles.text}>Your total is</Text>
-                <Text style={styles.textPrice}>R${total.toFixed(2)}</Text>
+                <Text style={styles.textPrice}>R${purchase.total.toFixed(2)}</Text>
             </View>
             <Text style={styles.text}>Put your cash in the box and take change if needed</Text>
             <View style={styles.priceContainer}>                
