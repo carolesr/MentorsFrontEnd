@@ -1,35 +1,19 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+import * as PurchaseService from '../services/PurchaseService'
+
 const CashScreen = props => {
     
     const purchase = props.navigation.getParam('purchase');
 
     useEffect(() => {
-
         purchase.method = "cash"
-        console.log('post:')
-        console.log(purchase)
         var json = JSON.stringify(purchase)
-        console.log(json)
 
-        let url = 'https://cinqbreak.herokuapp.com/api/Purchase/Create'
-        let headers = { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-        fetch(url, 
-            {headers: headers, method: 'POST', body: json})
-        .then(response => response.json())
-        .then(responseJson => {
-            console.log('SUCCESS')
-            console.log(responseJson)
-        })
-        .catch(e => {
-            console.log('FAILURE')
-            console.log(e)
-        })
-
+        PurchaseService.CreatePurchase(json)
+        .then(response => console.log(response))
+        .catch(e => console.error(e))
     },[])
 
     return (

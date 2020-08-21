@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import ProductComponent from '../components/ProductComponent'
-// import { listProducts } from '../fake_data/products'
+import * as ProductService from '../services/ProductService'
 
 
 const ProductScreen = props => {
@@ -15,20 +15,10 @@ const ProductScreen = props => {
     const [listProducts, addListProducts] = useState([])
 
     useEffect(() => {
-        let url = 'https://cinqbreak.herokuapp.com/api/Product/GetAll'
-        let headers = { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-
-        fetch(url, {headers: headers})
-        .then(response => response.json())
-        .then(responseJson => {
-            addListProducts(responseJson)
+        ProductService.GetAll().then(products => {
+            addListProducts(products)
         })
-        .catch(e => {
-            console.log(e)
-        })
+        .catch(e => console.error(e))
     },[])
 
     const addProduct = id => {
@@ -106,6 +96,7 @@ const ProductScreen = props => {
 
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity activeOpacity={0.4} onPress={() => {
+                            ProductService.teste();
                             props.navigation.push('CartScreen', {products: list, update: updateProducts});
                         }}>
                         <View  >
