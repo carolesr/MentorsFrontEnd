@@ -54,7 +54,7 @@ const PaymentScreen = props => {
                     <TouchableOpacity
                         activeOpacity={0.4} 
                         onPress={() => {
-                            props.navigation.push("CardScreen", { total: total});
+                            props.navigation.push("LoginScreen", { total: total});
                         }}>
                         <View  >
                             <Text style={styles.textButton}>CARD</Text>

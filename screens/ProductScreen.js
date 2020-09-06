@@ -4,7 +4,6 @@ import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import ProductComponent from '../components/ProductComponent'
 import * as ProductService from '../services/ProductService'
 
-
 const ProductScreen = props => {
 
     const [list, addList] = useState([]);
