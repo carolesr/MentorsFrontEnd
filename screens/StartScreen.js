@@ -1,25 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Button, Image, Text, TouchableOpacity } from 'react-native';
+import signalr from 'react-native-signalr';
+import * as signalR from '@microsoft/signalr';
 
 const StartScreen = props => {
+
+    useEffect(() => {
+        const connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://cinqbreak.herokuapp.com/hub")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+        try {
+            connection.start();
+            console.log("connected");
+        } catch (err) {
+            console.log(err);
+            setTimeout(() => start(), 5000);
+        }
+
+        connection.on("ReceiveMessage", (message) => {
+            console.log("FUNCIONOU CARAI => " + message)
+        })
+        
+        connection.onclose(async() => {
+            await start();
+        });
+    });
+
     return (
-        <View style={styles.screen}>
-            <View style={styles.imageContainer}>
-                <Image
-                    style={styles.image}
-                    source={require('../assets/logo2.png')}
-                />
+        // <View style={styles.background}>
+            <View style={styles.screen}>
+                <View style={styles.imageContainer}>
+                    <Image
+                        style={styles.image}
+                        source={require('../assets/logo2.png')}
+                    />
+                </View>
+                    <TouchableOpacity activeOpacity={0.4} onPress={() => {
+                            props.navigation.push('ProductScreen');
+                        }}>
+                        <Text style={styles.textButton}>START</Text>
+                    </TouchableOpacity>
             </View>
-                <TouchableOpacity activeOpacity={0.4} onPress={() => {
-                        props.navigation.push('ProductScreen');
-                    }}>
-                    <Text style={styles.textButton}>START</Text>
-                </TouchableOpacity>
-        </View>
+        // </View>
     )
 };
 
 const styles = StyleSheet.create({
+    background: {
+        backgroundColor: 'white'
+    },
     screen: {
         flex: 1,
         justifyContent: 'space-around',

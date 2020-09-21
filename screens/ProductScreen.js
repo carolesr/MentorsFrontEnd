@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 70,
-        marginBottom: 70
+        marginBottom: 70,
+        backgroundColor: 'white'
     },
     bottomButtons: {
         flex: 1,
