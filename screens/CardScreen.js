@@ -1,29 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, AppRegistry } from 'react-native';
 
+import * as signalR from '@microsoft/signalr';
+import * as PurchaseService from '../services/PurchaseService'
+
 import WaitingCardComponent from '../components/WaitingCardComponent';
 import ApprovedComponent from '../components/ApprovedComponent';
-import RejectedComponent from '../components/RejectedComponent';
 
 const CardScreen = props => {
     
-    const total = props.navigation.getParam('total');
+    const purchase = props.navigation.getParam('purchase');
     const [component, setComponent] = useState(<WaitingCardComponent/>)
     const [button, setButton] = useState('BACK')
 
     useEffect(() => {
-        if (total > 0 && total < 3) {
-            setComponent(<WaitingCardComponent/>)
-            setButton('BACK')
-        } 
-        else if (total >= 3 && total < 5) {
+        const connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://cinqbreak.herokuapp.com/hub")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+        try {
+            connection.start();
+            console.log("connected");
+        } catch (err) {
+            console.log(err);
+            setTimeout(() => start(), 5000);
+        }        
+        connection.onclose(async() => {
+            await start();
+        });
+        
+        connection.on("Teste", (message) => {
+            console.log("TESTE => " + message)
+        })
+
+        connection.on("Login", (idcard) => {
+            console.log("LOGIN => " + idcard)
             setComponent(<ApprovedComponent/>)
             setButton('FINISH')
-        }
-        else {
-            setComponent(<RejectedComponent/>)
-            setButton('SIGN UP')
-        }
+            props.navigation.push("LoginScreen", { idCard: idcard});
+        })
+        
+        connection.on("Finish", (message) => {
+            console.log("FINISH => " + message)
+            setComponent(<ApprovedComponent/>)
+            setButton('FINISH')
+        })
+
+        purchase.method = "card"
+        purchase.pending = "true"
+        var json = JSON.stringify(purchase)
+
+        PurchaseService.CreatePurchase(json)
+        .then(response => console.log(response))
+        .catch(e => console.error(e))
+
     }, [])
 
     return (
@@ -38,10 +68,9 @@ const CardScreen = props => {
                         onPress={() => {
                             if (button == 'BACK')
                                 props.navigation.goBack();
-                            else if (button == 'FINISH')
+                            else if (button == 'FINISH') {
                                 props.navigation.popToTop();
-                            else
-                                console.log('sign up')
+                            }
                         }}>
                         <View>
                             <Text style={styles.textButton}>{button}</Text>

@@ -9,6 +9,7 @@ const CashScreen = props => {
 
     useEffect(() => {
         purchase.method = "cash"
+        purchase.pending = "false"
         var json = JSON.stringify(purchase)
 
         PurchaseService.CreatePurchase(json)

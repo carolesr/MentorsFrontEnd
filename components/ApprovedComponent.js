@@ -4,7 +4,7 @@ import { View, StyleSheet, Image, Text } from 'react-native';
 const ApprovedComponent = props => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Success</Text>
+            <Text style={styles.text}>All done!</Text>
 
             <View style={styles.imageContainer}>
                 <Image

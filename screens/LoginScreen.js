@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
+import * as UserService from '../services/UserService'
+
 const LoginScreen = props => {
 
+    const idCard = props.navigation.getParam('idCard');
     const [email, setEmail] = useState("")
 
     return(
@@ -12,10 +15,19 @@ const LoginScreen = props => {
                 style={styles.input}
                 onChangeText={text => setEmail(text)}
                 placeholder={'Please type your email'}
-                //value={value}
             />
             <TouchableOpacity activeOpacity={0.4} onPress={() => {
-                    console.log(email)
+                var user = {
+                    "idCard": parseInt(idCard),
+                    "username": email
+                }
+
+                var json = JSON.stringify(user)
+                UserService.CreateUser(json)
+                .then(response => console.log(response))
+                .catch(e => console.error(e))
+
+                props.navigation.goBack();
                 }}>
                 <Text style={styles.textButton}>SIGN UP</Text>
             </TouchableOpacity>

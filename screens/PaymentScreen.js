@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const PaymentScreen = props => {
     
-    const total = props.navigation.getParam('total');
     const products = props.navigation.getParam('products');
 
     const [purchase, setPurchase] = useState("")
@@ -25,7 +24,8 @@ const PaymentScreen = props => {
             "date": date,
             "total": total,
             "method": "",
-            "cart": cart
+            "cart": cart,
+            "pending": ""
         }
         setPurchase(purchase)
 
@@ -54,7 +54,7 @@ const PaymentScreen = props => {
                     <TouchableOpacity
                         activeOpacity={0.4} 
                         onPress={() => {
-                            props.navigation.push("LoginScreen", { total: total});
+                            props.navigation.push("CardScreen", { purchase: purchase});
                         }}>
                         <View  >
                             <Text style={styles.textButton}>CARD</Text>
