@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Button, Image, Text, TouchableOpacity } from 'react-native';
 
+import * as ProductService from '../services/ProductService'
+
 const StartScreen = props => {
+    
+    const [listProducts, addListProducts] = useState([]);
+    const [disabledButton, setDisabledButton] = useState(true);
+
+    useEffect(() => {
+        ProductService.GetAll().then(products => {
+            addListProducts(products)
+            setDisabledButton(false)
+            console.log('done')
+            console.log(products)
+        })
+        .catch(e => console.error(e))
+    },[])
+
+
     return (
         // <View style={styles.background}>
             <View style={styles.screen}>
@@ -11,8 +28,8 @@ const StartScreen = props => {
                         source={require('../assets/logo2.png')}
                     />
                 </View>
-                    <TouchableOpacity activeOpacity={0.4} onPress={() => {
-                            props.navigation.push('ProductScreen');
+                    <TouchableOpacity activeOpacity={0.4} disabled={disabledButton} onPress={() => {
+                            props.navigation.push('ProductScreen', {products: listProducts});
                         }}>
                         <Text style={styles.textButton}>START</Text>
                     </TouchableOpacity>

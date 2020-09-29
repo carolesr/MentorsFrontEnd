@@ -12,12 +12,14 @@ const ProductScreen = props => {
     const [disabledButton, setDisabledButton] = useState(true);
 
     const [listProducts, addListProducts] = useState([])
+    const products = props.navigation.getParam('products');
 
     useEffect(() => {
-        ProductService.GetAll().then(products => {
-            addListProducts(products)
-        })
-        .catch(e => console.error(e))
+        // ProductService.GetAll().then(products => {
+        //     addListProducts(products)
+        // })
+        // .catch(e => console.error(e))
+        addListProducts(products);
     },[])
 
     const addProduct = id => {
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 70,
         marginBottom: 70,
-        backgroundColor: 'white'
+        // backgroundColor: 'white'
     },
     bottomButtons: {
         flex: 1,
