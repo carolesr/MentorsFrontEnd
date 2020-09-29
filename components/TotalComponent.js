@@ -9,13 +9,15 @@ const TotalComponent = props => {
     })
     
     const sumTotal = () => {
-        var total = 0
+        var tot = 0
         for(var i = 0; i < props.products.length; i++) {
-            let price = parseFloat((props.products[i].product.price).replace('R$', ''))
+            let price = (props.products[i].product.price)
             let quantity = props.products[i].quantity
-            total += price * quantity
+            tot += price * quantity
         }
-        setTotal(total)
+        setTotal(tot)
+        if (props.isPurchase)
+            props.updateTotal(tot)
     }
     
     return (

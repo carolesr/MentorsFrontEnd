@@ -42,14 +42,17 @@ const CartScreen = props => {
 
             <View style={styles.flatListContainer}>
                 <FlatList
-                    keyExtractor={(item, index) => (item.product.id).toString()} 
+                    keyExtractor={(item, index) => (item.product.idProduct).toString()} 
                     data={products} 
                     renderItem={renderGridItem}
                 />
             </View>
 
             <View style={styles.totalContainer}>
-                <TotalComponent products={products}/>
+                <TotalComponent 
+                    products={products}
+                    isPurchase={false}
+                />
             </View>
             
             <View style={styles.bottomButtons}>

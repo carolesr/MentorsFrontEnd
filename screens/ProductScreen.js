@@ -1,27 +1,39 @@
-import React, {useState} from 'react';
-import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import ProductComponent from '../components/ProductComponent'
-import { listProducts } from '../fake_data/products'
-
+import * as ProductService from '../services/ProductService'
 
 const ProductScreen = props => {
 
-    const [list, addList] = useState([])
-    const [title, setTitle] = useState('CART')
-    const [quantity, addQuantity] = useState(0)
-    const [disabledButton, setDisabledButton] = useState(true)
+    const [list, addList] = useState([]);
+    const [quantity, addQuantity] = useState(0);
+    const [title, setTitle] = useState('CART');
+    const [disabledButton, setDisabledButton] = useState(true);
+
+    const [listProducts, addListProducts] = useState([])
+    const products = props.navigation.getParam('products');
+
+    useEffect(() => {
+        // ProductService.GetAll().then(products => {
+        //     addListProducts(products)
+        // })
+        // .catch(e => console.error(e))
+        addListProducts(products);
+    },[])
 
     const addProduct = id => {
         if(list.length) {
-            if (list.filter(x => x.product.id == id).length) { //se já tem um item desse produto na lista, aumenta a quantidade
-                list.find(x => x.product.id == id).quantity += 1
+            if (list.filter(x => x.product.idProduct == id).length) { //se já tem um item desse produto na lista, aumenta a quantidade
+                list.find(x => x.product.idProduct == id).quantity += 1
                 addList([...list])
             } else {
-                addList(current => [...current, { product: listProducts[id-1], quantity: 1 } ])
+                addList(current => [...current, { product: listProducts.filter(x => x.idProduct == id)[0], quantity: 1 } ])
             }
         } else {
-            addList(current => [...current, { product: listProducts[id-1], quantity: 1 } ])
+            let obj = { product: listProducts.filter(x => x.idProduct == id)[0], quantity: 1 }
+            let newState = [...list, obj]
+            addList(newState)
         }
         
         addQuantity(quantity + 1)
@@ -49,7 +61,7 @@ const ProductScreen = props => {
         return(
                 <View>
                     <ProductComponent 
-                    id={itemData.item.id}
+                    id={itemData.item.idProduct}
                     title={itemData.item.name}
                     price={itemData.item.price}
                     image={itemData.item.image}
@@ -64,7 +76,7 @@ const ProductScreen = props => {
 
             <View style={styles.flatListContainer}>
                 <FlatList
-                    keyExtractor={(item, index) => item.id} 
+                    keyExtractor={(item, index) => item.idProduct} 
                     data={listProducts} 
                     renderItem={renderGridItem} 
                     numColumns={2}
@@ -85,6 +97,7 @@ const ProductScreen = props => {
 
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity activeOpacity={0.4} onPress={() => {
+                            ProductService.teste();
                             props.navigation.push('CartScreen', {products: list, update: updateProducts});
                         }}>
                         <View  >
@@ -95,8 +108,8 @@ const ProductScreen = props => {
 
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity 
-                    disabled={disabledButton}
                     activeOpacity={0.4} 
+                    disabled={disabledButton} 
                     onPress={() => {
                             props.navigation.push('PurchaseScreen', {products: list, update: updateProducts});
                         }}>
@@ -117,7 +130,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 70,
-        marginBottom: 70
+        marginBottom: 70,
+        // backgroundColor: 'white'
     },
     bottomButtons: {
         flex: 1,
@@ -146,8 +160,7 @@ const styles = StyleSheet.create({
         borderColor: "#002c4f",
         minHeight: '50%',
         textAlign: 'center',
-        textAlignVertical: 'center'
-        
+        textAlignVertical: 'center'        
     },
     disabledTextButton: {
         color: 'white',
@@ -158,8 +171,7 @@ const styles = StyleSheet.create({
         minHeight: '50%',
         textAlign: 'center',
         textAlignVertical: 'center',
-        opacity: 0.8
-        
+        opacity: 0.8  
     }
 });
 

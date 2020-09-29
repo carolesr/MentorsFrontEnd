@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import PurchaseComponent from '../components/PurchaseComponent';
 import TotalComponent from '../components/TotalComponent';
 
 const PurchaseScreen = props => {
 
-    const [products, updateProducts] = useState( props.navigation.getParam('products') )
-    const update = props.navigation.getParam('update')
-    
-    const [quantity, addQuantity] = useState(0)
-    const [disabledButton, setDisabledButton] = useState(true)
+    const [products, updateProducts] = useState( props.navigation.getParam('products') );
+    const update = props.navigation.getParam('update');
+
+    const [quantity, addQuantity] = useState(0);
+    const [disabledButton, setDisabledButton] = useState(true);
+    const [total, setTotal] = useState(0)
 
     useEffect(() => {
-        var q = 0
+        var quant = 0;
         for(var i = 0; i < products.length; i++)
-            q += products[i].quantity
-        addQuantity(q)
+            quant += products[i].quantity;
+        addQuantity(quant)
 
-        if (quantity > 0) setDisabledButton(false)
+        if(quantity > 0) setDisabledButton(false)
         else setDisabledButton(true)
+        
     })
+
+    const updateTotal = valor => {
+        setTotal(valor)
+    }
 
     const removeProduct = item => {
         var index = products.map(x => { return x.product }).indexOf(item.product)        
@@ -51,14 +57,18 @@ const PurchaseScreen = props => {
 
             <View style={styles.flatListContainer}>
                 <FlatList
-                    keyExtractor={(item, index) => (item.product.id).toString()} 
+                    keyExtractor={(item, index) => (item.product.idProduct).toString()} 
                     data={products} 
                     renderItem={renderGridItem}
                 />
             </View>
 
             <View style={styles.totalContainer}>
-                <TotalComponent products={products}/>
+                <TotalComponent 
+                    products={products}
+                    updateTotal={updateTotal}
+                    isPurchase={true}
+                />
             </View>
             
             <View style={styles.bottomButtons}>
@@ -76,11 +86,11 @@ const PurchaseScreen = props => {
 
                 <View style={styles.textButtonContainer}>
                     <TouchableOpacity 
-                    disabled={disabledButton}
+                    disabled={disabledButton} 
                     activeOpacity={0.4} 
                     onPress={() => {
                             update(products)
-                            props.navigation.goBack();
+                            props.navigation.push("PaymentScreen", { total: total, products: products});
                         }}>
                         <View  >
                             <Text style={disabledButton ? styles.disabledTextButton : styles.textButton}>PAY</Text>
@@ -147,8 +157,7 @@ const styles = StyleSheet.create({
         minHeight: '70%',
         textAlign: 'center',
         textAlignVertical: 'center',
-        opacity: 0.8
-        
+        opacity: 0.8  
     }
 });
 

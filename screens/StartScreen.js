@@ -1,25 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Button, Image, Text, TouchableOpacity } from 'react-native';
 
+import * as ProductService from '../services/ProductService'
+
 const StartScreen = props => {
+    
+    const [listProducts, addListProducts] = useState([]);
+    const [disabledButton, setDisabledButton] = useState(true);
+
+    useEffect(() => {
+        ProductService.GetAll().then(products => {
+            addListProducts(products)
+            setDisabledButton(false)
+        })
+        .catch(e => console.error(e))
+    },[])
+
+
     return (
-        <View style={styles.screen}>
-            <View style={styles.imageContainer}>
-                <Image
-                    style={styles.image}
-                    source={require('../assets/logo2.png')}
-                />
+        // <View style={styles.background}>
+            <View style={styles.screen}>
+                <View style={styles.imageContainer}>
+                    <Image
+                        style={styles.image}
+                        source={require('../assets/logo2.png')}
+                    />
+                </View>
+                    <TouchableOpacity activeOpacity={0.4} disabled={disabledButton} onPress={() => {
+                            props.navigation.push('ProductScreen', {products: listProducts});
+                        }}>
+                        <Text style={styles.textButton}>START</Text>
+                    </TouchableOpacity>
             </View>
-                <TouchableOpacity activeOpacity={0.4} onPress={() => {
-                        props.navigation.push('ProductScreen');
-                    }}>
-                    <Text style={styles.textButton}>START</Text>
-                </TouchableOpacity>
-        </View>
+        // </View>
     )
 };
 
 const styles = StyleSheet.create({
+    background: {
+        backgroundColor: 'white'
+    },
     screen: {
         flex: 1,
         justifyContent: 'space-around',
@@ -35,11 +55,14 @@ const styles = StyleSheet.create({
     // },
     image: {
         width: '100%',
-        height: '100%',
+        height: '65%'
     },
     imageContainer: {
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'center',
         width: '80%',
-        height: '60%'
+        height: '80%'
     },
     textButtonContainer: {
         // flex: 1,

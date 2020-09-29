@@ -7,13 +7,13 @@ const ProductComponent = props => {
             <View style={styles.imageContainer}>
                 <Image
                     style={styles.image}
-                    source={props.image}
-                    // source={{uri: props.image}}
+                    // source={props.image}
+                    source={{uri: props.image}}
                 />
             </View>
             <View style={styles.descriptionContainer}>
                 <View style={styles.textContainer}>
-                    <Text>{props.price}</Text>
+                    <Text>R${props.price.toFixed(2)}</Text>
                 </View> 
                 <View style={styles.textButtonContainer}>                 
                 <TouchableOpacity activeOpacity={0.4} onPress={() => {
