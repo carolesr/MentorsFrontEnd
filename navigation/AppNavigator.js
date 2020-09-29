@@ -9,6 +9,7 @@ import PurchaseScreen from '../screens/PurchaseScreen';
 import CashScreen from '../screens/CashScreen';
 import CardScreen from '../screens/CardScreen';
 import LoginScreen from '../screens/LoginScreen';
+import FinishScreen from '../screens/FinishScreen';
 
 import PaymentScreen from '../screens/PaymentScreen';
 const Navigator = createStackNavigator({
@@ -19,7 +20,8 @@ const Navigator = createStackNavigator({
     PaymentScreen: { screen: PaymentScreen, navigationOptions: { header: null} },
     CashScreen: { screen: CashScreen, navigationOptions: { header: null} },
     CardScreen: { screen: CardScreen, navigationOptions: { header: null} },
-    LoginScreen: { screen: LoginScreen, navigationOptions: { header: null} }
+    LoginScreen: { screen: LoginScreen, navigationOptions: { header: null} },
+    FinishScreen: { screen: FinishScreen, navigationOptions: { header: null} }
 });
 
 export default createAppContainer(Navigator);

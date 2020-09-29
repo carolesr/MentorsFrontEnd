@@ -12,8 +12,6 @@ const StartScreen = props => {
         ProductService.GetAll().then(products => {
             addListProducts(products)
             setDisabledButton(false)
-            console.log('done')
-            console.log(products)
         })
         .catch(e => console.error(e))
     },[])

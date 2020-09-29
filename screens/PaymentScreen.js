@@ -15,10 +15,9 @@ const PaymentScreen = props => {
         products.forEach((item, index) => {
             var idProduct = item.product.idProduct;
             var quantity = item.quantity;
-            total += item.product.price
+            total += item.product.price * quantity
             cart.push({"idProduct": idProduct, "quantity": quantity})
         })
-
         var purchase = {
             "idUser": "",
             "date": date,

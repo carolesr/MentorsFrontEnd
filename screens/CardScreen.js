@@ -35,8 +35,6 @@ const CardScreen = props => {
 
         connection.on("Login", (idcard) => {
             console.log("LOGIN => " + idcard)
-            setComponent(<ApprovedComponent/>)
-            setButton('FINISH')
             props.navigation.push("LoginScreen", { idCard: idcard});
         })
         

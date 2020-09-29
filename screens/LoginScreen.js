@@ -27,7 +27,7 @@ const LoginScreen = props => {
                 .then(response => console.log(response))
                 .catch(e => console.error(e))
 
-                props.navigation.goBack();
+                props.navigation.push("FinishScreen");
                 }}>
                 <Text style={styles.textButton}>SIGN UP</Text>
             </TouchableOpacity>
